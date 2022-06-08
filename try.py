@@ -128,7 +128,7 @@ while state != 'accept' :
     state = tabel_transisi[(state, cari_huruf)]
     index_kalimat = index_kalimat + 1
     if state == 'q38' and (kalimat_baru[index_kalimat] == ' ' or kalimat_baru[index_kalimat] == '#') :
-        st.success('current token: '+token+', valid')
+        st.info('current token: '+token+', valid')
         token = ''
         index_kata = index_kata + 1
     if state == 'error':

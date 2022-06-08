@@ -2,7 +2,7 @@ import streamlit as st
 import string
 
 st.title('Lexical Analyzer - IF4411')
-st.subheader('by Kelompok 6 \n 1. Fadhly Al-farizi \n 2. Fadli Zuhri \n 3. Kian Nailaizza')
+st.subheader('by Kelompok 4 \n 1. Fadhly Al-farizi \n 2. Fadli Zuhri \n 3. Kian Nailaizza')
 
 alphabet = list(string.ascii_lowercase)
 state_list = ['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 
@@ -136,4 +136,4 @@ while state != 'accept' :
         break;
 
 if state == 'accept' :
-    st.success(f'semua token di input: {kalimat}, valid')
+    st.success('semua token di input: **'+kalimat+'**, valid')

@@ -1,9 +1,29 @@
 import streamlit as st
+import time
 import string
 
-st.title('Lexical Analyzer - IF4411')
-st.subheader('by Kelompok 4 \n 1. Fadhly Al-farizi \n 2. Fadli Zuhri \n 3. Kian Nailaizza')
+with st.sidebar:
+    st.title('Lexical Analyzer & Parser')
+    st.subheader('by Kelompok 4 (IF4411) \n'
+                 '1. Fadhly Al-farizi (1301201472) \n 2. Fadli Zuhri (1301202613) \n 3. Kian Nailaizza (1301204455)')
 
+st.title('Kata yang Bisa Diproses (Bahasa Arab)')
+col1, col2 = st.columns(2)
+with col1:
+    st.warning('Kata Benda (Noun)')
+    st.write('**1. durjun**')
+    st.write('**2. abun**')
+    st.write('**3. ummun**')
+    st.write('**4. fulan**')
+    st.write('**5. daftarun**')
+    st.write('**6. tannuurotun**')
+with col2:
+    st.warning('Kata Kerja (Verb)')
+    st.write('**1. dharaba**')
+    st.write('**2. jaraha**')
+    st.write('**3. kataba**')
+    st.write('**4. darrasa**')
+    
 alphabet = list(string.ascii_lowercase)
 state_list = ['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 
          'q8', 'q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15', 
@@ -112,7 +132,9 @@ tabel_transisi[('q38','#')] = 'accept'
 tabel_transisi[('q39',' ')] = 'q39'
 tabel_transisi[('q39','#')] = 'accept'
 
-kalimat = st.text_input('Masukkan Kalimat', value='input')
+with st.form(key='Form Input Kalimat'):
+    kalimat = st.text_input('Kalimat')
+    st.form_submit_button('Check')
 #kalimat = ' durjun abun       ummun       fulan      daftarun tannuurotun dharaba jaraha kataba kataba'
 kalimat_baru = kalimat.lower()+'#'
 kalimat_temp = kalimat.split()
@@ -131,7 +153,9 @@ while state != 'accept' :
         st.info('current token: '+token+', valid')
         token = ''
         index_kata = index_kata + 1
-    if state == 'error':
+    if kalimat == '' :
+        break;
+    if state == 'error' :
         st.error('Kata **'+kalimat_temp[index_kata]+'** Tidak Valid')
         break;
 

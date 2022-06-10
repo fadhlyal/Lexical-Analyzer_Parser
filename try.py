@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 import string
 
 with st.sidebar:
@@ -10,7 +9,7 @@ with st.sidebar:
 st.title('Kata yang Bisa Diproses (Bahasa Arab)')
 col1, col2 = st.columns(2)
 with col1:
-    st.warning('Kata Benda (Noun)')
+    st.info('Kata Benda (Noun)')
     st.write('**1. durjun**')
     st.write('**2. abun**')
     st.write('**3. ummun**')
@@ -18,7 +17,7 @@ with col1:
     st.write('**5. daftarun**')
     st.write('**6. tannuurotun**')
 with col2:
-    st.warning('Kata Kerja (Verb)')
+    st.info('Kata Kerja (Verb)')
     st.write('**1. dharaba**')
     st.write('**2. jaraha**')
     st.write('**3. kataba**')
@@ -133,8 +132,10 @@ tabel_transisi[('q39',' ')] = 'q39'
 tabel_transisi[('q39','#')] = 'accept'
 
 with st.form(key='Form Input Kalimat'):
-    kalimat = st.text_input('Kalimat')
+    kalimat = st.text_input('Masukkan Kalimat')
     st.form_submit_button('Check')
+colt1, colt2 = st.columns([10, 2])
+    
 #kalimat = ' durjun abun       ummun       fulan      daftarun tannuurotun dharaba jaraha kataba kataba'
 kalimat_baru = kalimat.lower()+'#'
 kalimat_temp = kalimat.split()
@@ -150,14 +151,23 @@ while state != 'accept' :
     state = tabel_transisi[(state, cari_huruf)]
     index_kalimat = index_kalimat + 1
     if state == 'q38' and (kalimat_baru[index_kalimat] == ' ' or kalimat_baru[index_kalimat] == '#') :
-        st.info('current token: '+token+', valid')
+        with colt1:
+            st.info('current token: **'+token+'**')
+        with colt2:
+            st.success('Valid')
         token = ''
         index_kata = index_kata + 1
     if kalimat == '' :
         break;
     if state == 'error' :
-        st.error('Kata **'+kalimat_temp[index_kata]+'** Tidak Valid')
+        with colt1:
+            st.warning('Kata **'+kalimat_temp[index_kata]+'**')
+        with colt2:
+            st.error('Tidak Valid')
         break;
 
 if state == 'accept' :
-    st.success('semua token di input: **'+kalimat+'**, valid')
+    with colt1:
+        st.info('semua token di input: **'+kalimat+'**')
+    with colt2:
+        st.success('Valid')

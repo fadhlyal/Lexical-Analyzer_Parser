@@ -22,8 +22,7 @@ with col2:
     st.write('**2. jaraha**')
     st.write('**3. kataba**')
     st.write('**4. darrasa**')
-
-#Lexical Analyzer
+    
 alphabet = list(string.ascii_lowercase)
 state_list = ['q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 
          'q8', 'q9', 'q10', 'q11', 'q12', 'q13', 'q14', 'q15', 
@@ -132,59 +131,14 @@ tabel_transisi[('q38','#')] = 'accept'
 tabel_transisi[('q39',' ')] = 'q39'
 tabel_transisi[('q39','#')] = 'accept'
 
-#Table Parser
-non_terminals = ['S', 'NN', 'VB']
-terminals = ['durjun', 'abun', 'ummun', 'fulan', 'daftarun', 'tannuurotun', 
-             'dharaba', 'jaraha', 'kataba', 'darrasa']
-
-parse_table = {}
-#S
-parse_table[('S', 'durjun')] = ['NN', 'VB', 'NN']
-parse_table[('S', 'abun')] = ['NN', 'VB', 'NN']
-parse_table[('S', 'ummun')] = ['NN', 'VB', 'NN']
-parse_table[('S', 'fulan')] = ['NN', 'VB', 'NN']
-parse_table[('S', 'daftarun')] = ['NN', 'VB', 'NN']
-parse_table[('S', 'tannuurotun')] = ['NN', 'VB', 'NN']
-parse_table[('S', 'dharaba')] = ['error']
-parse_table[('S', 'jaraha')] = ['error']
-parse_table[('S', 'kataba')] = ['error']
-parse_table[('S', 'darrasa')] = ['error']
-parse_table[('S', 'EOS')] = ['error']
-#NN or A tinggal ganti
-parse_table[('NN', 'durjun')] = ['durjun']
-parse_table[('NN', 'abun')] = ['abun']
-parse_table[('NN', 'ummun')] = ['ummun']
-parse_table[('NN', 'fulan')] = ['fulan']
-parse_table[('NN', 'daftarun')] = ['daftarun']
-parse_table[('NN', 'tannuurotun')] = ['tannuurotun']
-parse_table[('NN', 'dharaba')] = ['error']
-parse_table[('NN', 'jaraha')] = ['error']
-parse_table[('NN', 'kataba')] = ['error']
-parse_table[('NN', 'darrasa')] = ['error']
-parse_table[('NN', 'EOS')] = ['error']
-#VB or B tinggal ganti
-parse_table[('VB', 'durjun')] = ['error']
-parse_table[('VB', 'abun')] = ['error']
-parse_table[('VB', 'ummun')] = ['error']
-parse_table[('VB', 'fulan')] = ['error']
-parse_table[('VB', 'daftarun')] = ['error']
-parse_table[('VB', 'tannuurotun')] = ['error']
-parse_table[('VB', 'dharaba')] = ['dharaba']
-parse_table[('VB', 'jaraha')] = ['jaraha']
-parse_table[('VB', 'kataba')] = ['kataba']
-parse_table[('VB', 'darrasa')] = ['darrasa']
-parse_table[('VB', 'EOS')] = ['error']
-
-#Main Program
 with st.form(key='Form Input Kalimat'):
     kalimat = st.text_input('Masukkan Kalimat')
     st.form_submit_button('Check')
-st.subheader('Lexical Analyzer Checker')
 colt1, colt2 = st.columns([10, 2])
     
 #kalimat = ' durjun abun       ummun       fulan      daftarun tannuurotun dharaba jaraha kataba kataba'
 kalimat_baru = kalimat.lower()+'#'
-kalimat_temp = kalimat.lower().split()
+kalimat_temp = kalimat.split()
 
 index_kalimat = 0
 index_kata = 0
@@ -210,7 +164,6 @@ while state != 'accept' :
             st.warning('Kata **'+kalimat_temp[index_kata]+'**')
         with colt2:
             st.error('Tidak Valid')
-        st.error('Parser Tidak Bisa Dijalankan')
         break;
 
 if state == 'accept' :
@@ -218,62 +171,3 @@ if state == 'accept' :
         st.info('semua token di input: **'+kalimat+'**')
     with colt2:
         st.success('Valid')
-    st.subheader('Parser Checker')
-    cols1, cols2 = st.columns([10, 2])
-
-    kalimat_temp.append('EOS')
-    #inisialisasi stack
-    stack = []
-    stack.append('#')
-    stack.append('S')
-
-    #inisialisasi read input 
-    idx_token = 0
-    symbol = kalimat_temp[idx_token]
-
-    #proses parsing 
-    print('isi stack :',stack,'\n')
-    while (len(stack) > 0) :
-        top = stack[len(stack)-1]
-        print('top = ', top)
-        print('symbol = ', symbol)
-        if top in terminals :
-            print('top adalah simbol terminal')
-            if top==symbol:
-                stack.pop()
-                idx_token = idx_token + 1
-                symbol = kalimat_temp[idx_token]
-                if symbol=='EOS' :
-                    print('isi stack :',stack)
-                    stack.pop()
-            else :
-                with cols1:
-                    st.warning('Kalimat Tidak Sesuai Grammara')
-                with cols2:
-                    st.error('Tidak Valid')
-                break;
-        elif top in non_terminals :
-            print('top adalah simbol non-terminal')
-            if parse_table[(top,symbol)][0] !=  'error':
-                stack.pop()
-                symbols_to_be_pushed = parse_table[(top, symbol)]
-                for i in range(len(symbols_to_be_pushed)-1,-1,-1):
-                    stack.append(symbols_to_be_pushed[i])
-            else:
-                with cols1:
-                    st.warning('Kalimat **'+kalimat+'** Tidak Sesuai Grammar')
-                with cols2:
-                    st.error('Tidak Valid')
-                break;
-        else:
-            with cols1:
-                st.warning('Kalimat **'+kalimat+'** Tidak Sesuai Grammar')
-            with cols2:
-                st.error('Tidak Valid')
-            break;
-        print('isi stack: ',stack)
-    if symbol == 'EOS' and len(stack)==0:
-        with cols1:
-            st.info('Kalimat **'+kalimat+'** Sesuai Grammar')
-        with cols2:
-            st.success('Valid')
